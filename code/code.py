@@ -57,8 +57,7 @@ idx2word = {i:w for i,w in enumerate(words)}
 
 np.random.seed(0)
 
-n_samples = len(input_train)
-print("n_samples:", n_samples)
+n_samples = len(input_train) ; print("n_samples:", n_samples)
 valid_rate = 0.1
 
 order = np.random.permutation(n_samples)
@@ -82,8 +81,8 @@ Y_valid = to_categorical(Y_valid_cat, num_classes=51)
 X_train_sent = preprocessing_data(X_train_str)
 X_valid_sent = preprocessing_data(X_valid_str)
 X_test_sent  = preprocessing_data(X_test_str)
-X_train_sent_idx[0]
 
+max_length_1 = (0,0,500)
 X_train_sent_idx = conversion_data(X_train_sent, word2idx, max_length_1, pad, oov)
 X_valid_sent_idx = conversion_data(X_valid_sent, word2idx, max_length_1, pad, oov)
 X_test_sent_idx  = conversion_data(X_test_sent,  word2idx, max_length_1, pad, oov)
@@ -107,9 +106,9 @@ X_test_doc_idx  = conversion_data(X_test_doc,  word2idx, max_length_2, pad, oov)
 sents_shape = max_length_1[2]
 n_outputs = 51 # np.unique(Y_valid)
 
-n_units = 100
+n_units = 200
 drop_rate = 0.2
-my_optimizer = 'sgd'
+my_optimizer = 'adam'
 
 model = build_model_HAN_simple(sents_shape, embeddings, n_units, n_outputs, drop_rate, False)
 
