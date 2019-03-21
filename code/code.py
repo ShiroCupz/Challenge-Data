@@ -57,7 +57,8 @@ idx2word = {i:w for i,w in enumerate(words)}
 
 np.random.seed(0)
 
-n_samples = len(input_train) ; print("n_samples:", n_samples)
+n_samples = len(input_train)
+print("n_samples:", n_samples)
 valid_rate = 0.1
 
 order = np.random.permutation(n_samples)

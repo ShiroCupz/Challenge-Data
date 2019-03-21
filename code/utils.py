@@ -57,9 +57,6 @@ def preprocessing_data(data) :
 
 # =================================================================== #
 
-X_train_sent[0]
-X_train_doc[0]
-
 def conversion_data(data, w2i, max_length, pad, oov) :
     def process_line(line) :
         new_line = []
