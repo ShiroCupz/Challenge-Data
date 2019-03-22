@@ -96,10 +96,25 @@ X_test_doc  = preprocessing_data([split(sent[0]) for sent in X_test_str])
 np.sort([len(X) for X in X_train_doc]) # 35
 np.sort([len(Y) for X in X_train_doc for Y in X if len(Y)>20]) # 60
 
-max_length_2 = (0,32,60)
+max_length_2 = (0,32,40)
 X_train_doc_idx = conversion_data(X_train_doc, word2idx, max_length_2, pad, oov)
 X_valid_doc_idx = conversion_data(X_valid_doc, word2idx, max_length_2, pad, oov)
 X_test_doc_idx  = conversion_data(X_test_doc,  word2idx, max_length_2, pad, oov)
+
+# =================================================================== #
+
+# Pseudo Filtre CNN (pour HAN)
+X_train_sent = preprocessing_data(X_train_str)
+X_valid_sent = preprocessing_data(X_valid_str)
+X_test_sent  = preprocessing_data(X_test_str)
+
+len([len(Y) for X in X_train_sent for Y in X if len(Y)>40]) # 60
+698/7225*100
+
+max_length_3 = (0,42,3)
+X_train_filter_idx = create_filtre_data(X_train_doc, word2idx, max_length_3, pad, oov)
+X_valid_filter_idx = create_filtre_data(X_valid_doc, word2idx, max_length_3, pad, oov)
+X_test_filter_idx  = create_filtre_data(X_test_doc,  word2idx, max_length_3, pad, oov)
 
 # =================================================================== #
 
@@ -129,12 +144,12 @@ model.fit(X_train, Y_train,
 
 # =================================================================== #
 
-docs_shape = max_length_2
+docs_shape = max_length_3 # max_length_2
 n_outputs = 51 # np.unique(Y_valid)
 
-n_units = 100
-drop_rate = 0.2
-my_optimizer = 'sgd'
+n_units = 200
+drop_rate = 0.25
+my_optimizer = 'adam'
 
 model = build_model_HAN(docs_shape, embeddings, n_units, n_outputs, drop_rate, False)
 
@@ -142,10 +157,10 @@ model.compile(loss='categorical_crossentropy',
               optimizer = my_optimizer,
               metrics = ['accuracy'])
 
-X_train = X_train_doc_idx
-X_valid = X_valid_doc_idx
+X_train = X_train_filter_idx # X_train_doc_idx
+X_valid = X_valid_filter_idx # X_valid_doc_idx
 
-nb_epochs = 5
+nb_epochs = 10
 batch_size = 32
 
 model.fit(X_train, Y_train,

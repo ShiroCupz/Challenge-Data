@@ -40,7 +40,7 @@ def load_vectors(fname):
 
 # =================================================================== #
 
-def split(txt, seps='.,?:;'):
+def split(txt, seps='.,!?:;()[]'):
     default_sep = seps[0]
     # we skip seps[0] because that's the default seperator
     for sep in seps[1:]:
@@ -51,7 +51,7 @@ def split(txt, seps='.,?:;'):
 
 def preprocessing_data(data) :
     def preprocess(sent) :
-        return text_to_word_sequence(sent)
+        return text_to_word_sequence(sent, filters='\'!"#$%&()*+,-./:;<=>?@[\\]^_`{|}~\t\n')
     new_data = np.array([[preprocess(sent) for sent in line] for line in data])
     return new_data
 
@@ -84,3 +84,21 @@ def conversion_data(data, w2i, max_length, pad, oov) :
     return new_data
 
 # =================================================================== #
+
+def create_filtre_data(data, w2i, max_length, pad, oov) :
+    def conversion(word) :
+        try :
+            elt = w2i[word]
+        except :
+            elt = w2i[oov]
+        return elt
+    def process_sent(sent) :
+        new_line = []
+        #sent.insert(0, pad)
+        #sent.insert(len(sent), pad)
+        for i in range(max_length[1]) :
+            index = np.round(i*(len(sent)-max_length[2])/max_length[1]).astype(int)
+            new_line.append(list(map(conversion, sent[index:index+max_length[2]])))
+        return new_line
+    new_data = np.array([process_sent(line[0]) for line in data])
+    return new_data
