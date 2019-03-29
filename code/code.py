@@ -112,9 +112,9 @@ len([len(Y) for X in X_train_sent for Y in X if len(Y)>40]) # 60
 698/7225*100
 
 max_length_3 = (0,42,3)
-X_train_filter_idx = create_filtre_data(X_train_doc, word2idx, max_length_3, pad, oov)
-X_valid_filter_idx = create_filtre_data(X_valid_doc, word2idx, max_length_3, pad, oov)
-X_test_filter_idx  = create_filtre_data(X_test_doc,  word2idx, max_length_3, pad, oov)
+X_train_filter_idx = create_filtre_data(X_train_doc, word2idx, idx2word, max_length_3, pad, oov)
+X_valid_filter_idx = create_filtre_data(X_valid_doc, word2idx, idx2word, max_length_3, pad, oov)
+X_test_filter_idx  = create_filtre_data(X_test_doc,  word2idx, idx2word, max_length_3, pad, oov)
 
 # =================================================================== #
 
