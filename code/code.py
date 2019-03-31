@@ -9,6 +9,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pandas as pd
 
+import gensim
 import pickle
 
 from keras.utils import to_categorical
@@ -33,6 +34,11 @@ with open(path_data + 'polyglot-fr.pkl', 'rb') as f:
     u = pickle._Unpickler(f)
     u.encoding = 'latin1'
     words, embeddings = u.load()
+
+model = gensim.models.Word2Vec.load(path_data + 'W2Vmodel_1.pkl')
+
+words = model.wv.index2word
+embeddings = model.wv.vectors
 
 pad = '<PAD>'
 oov = '<OOV>'
@@ -209,4 +215,5 @@ Y_id = input_test.index.values
 
 result_csv = pd.DataFrame({'ID':Y_id, 'intention':Y_test_cat})
 
-write_data(result_csv, 'result_CNN.csv', path_data)
+name = 'result_HAN_custom.csv' #'result_CNN.csv'
+write_data(result_csv, name, path_data)
